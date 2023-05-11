@@ -20,6 +20,12 @@ import com.JobSeeker.JobSeekerService.Model.SignInDetailsRequest;
 @RestController
 @RequestMapping("/jobseeker")
 public class JobSeekerController {
+	
+	
+	
+	// Just checking github flowwwwwww
+	//jwhjsdjhdwjhwdwjhewke	j	wek
+	
 	@Autowired
 	JobSeekerService jobSeekerService;
 	// To post the jobSeeker details
