@@ -12,32 +12,31 @@ import com.JobSeeker.JobSeekerService.Repository.JobSeekerRepository;
 
 @Service
 public class JobSeekerService {
-	//@Autowired
-	//PasswordEncoder passwordEncoder;
+	@Autowired
+	PasswordEncoder passwordEncoder;
     @Autowired
     JobSeekerRepository repo;
 	public void signupDetails(JobSeekerDetailsRequest jobSeekerDetailsRequest) {
-		//String encryptedPassword = passwordEncoder.encode(jobSeekerDetailsRequest.getPassword());
+		String encryptedPassword = passwordEncoder.encode(jobSeekerDetailsRequest.getPassword());
 		JobSeekerDetails details =  JobSeekerDetails.builder()
 				.firstName(jobSeekerDetailsRequest.getFirstName())
 				.lastName(jobSeekerDetailsRequest.getLastName())
 				.mobileNumber(jobSeekerDetailsRequest.getMobileNumber())
 				.email(jobSeekerDetailsRequest.getEmail())
-				//.password(encryptedPassword)
-				.password(jobSeekerDetailsRequest.getPassword())
+				.password(encryptedPassword)
 				.qualification(jobSeekerDetailsRequest.getQualification())
 				.skillSet(jobSeekerDetailsRequest.getSkillSet())
 				.experience(jobSeekerDetailsRequest.getExperience())
 				.summary(jobSeekerDetailsRequest.getSummary())
 				.address(jobSeekerDetailsRequest.getAddress())
 				.build();
-		
 		repo.save(details);
 	}
 	public List<JobSeekerDetails> allDetails() {
 		return repo.findAll();
 	}
-	/*public String signInDetails(SignInDetailsRequest signInDetailsRequest) {
+	public String signInDetails(SignInDetailsRequest signInDetailsRequest) {
+		String message="";
 		JobSeekerDetails signinDetails = repo.findByEmail(signInDetailsRequest.getEmail());
 		if (signinDetails!= null) 
 		{
@@ -46,19 +45,22 @@ public class JobSeekerService {
          Boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
         if (isPwdRight) 
         {
-		    return "Login Success";
+		    message="Login Success";
+		    return message;
 
 		} else 
 		{
-			return "Login Failed";
+			message = "Login Failed";
+			return message;
 	     }
 
 		}
 		else {
-            return "Email not exits";
+            message="Email not exits";
+            return message;
         }
 		
-	}*/
+	}
 	
 	
 

@@ -33,11 +33,11 @@ public class JobSeekerController {
 		return jobSeekerService.allDetails();
 	}
 	
-	/*@PostMapping("/signin")
+	@PostMapping("/signin")
 	public ResponseEntity<String> signInDetails(@RequestBody SignInDetailsRequest signInDetailsRequest){
-		jobSeekerService.signInDetails(signInDetailsRequest);
-		return new ResponseEntity<>("Signed In successfully",HttpStatus.OK);
-	}*/
+		String message=jobSeekerService.signInDetails(signInDetailsRequest);
+		return new ResponseEntity<>(message,HttpStatus.OK);
+	}
 	
 	
 	
