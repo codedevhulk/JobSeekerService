@@ -1,5 +1,7 @@
 package com.JobSeeker.JobSeekerService.Entity;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,11 +18,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class JobSeekerDetails {
+	
+	
+	
+	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	int id;
+	//@GeneratedValue(strategy=GenerationType.AUTO)
+	long jobSeekerId;
 	String firstName;
 	String lastName;
+	String userName;
 	String mobileNumber;
 	String email;
 	String password;
@@ -29,4 +36,5 @@ public class JobSeekerDetails {
 	String experience;
 	String summary;
 	String address;
+	//private Set<String> role;
 }
