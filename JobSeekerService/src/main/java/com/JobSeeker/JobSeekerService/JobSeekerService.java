@@ -11,6 +11,7 @@ import com.JobSeeker.JobSeekerService.Entity.JobSeekerDetails;
 import com.JobSeeker.JobSeekerService.Model.JobSeekerDetailsRequest;
 import com.JobSeeker.JobSeekerService.Model.SignInDetailsRequest;
 import com.JobSeeker.JobSeekerService.Repository.JobSeekerRepository;
+import com.JobSeeker.JobSeekerService.exception.CustomException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -120,6 +121,12 @@ public class JobSeekerService {
 	public List<JobSeekerDetails> allDetails() {
 		return repo.findAll();
 	}
+	
+	
+	
+	
+	
+	
 	public String signInDetails(SignInDetailsRequest signInDetailsRequest) {
 		String message="";
 		JobSeekerDetails signinDetails = repo.findByEmail(signInDetailsRequest.getEmail());
@@ -152,13 +159,31 @@ public class JobSeekerService {
 		// TODO Auto-generated method stub
 		
 		JobSeekerDetails jobSeekerDetails= repo.findByJobSeekerId(id);
-		return jobSeekerDetails;
+		if(Objects.isNull(jobSeekerDetails)) {
+			throw new CustomException("Job seeker not found with ID: "+id,"NOT_FOUND",404);
+		}
+		else {
+		return jobSeekerDetails;}
+		
+		
+		
 	}
 	public JobSeekerDetails getJobSeekerByUserName(String userName) {
 		// TODO Auto-generated method stub
 		log.info("user name"+userName);
 		
-		return repo.findByUserName(userName);
+		
+		JobSeekerDetails jobSeekerDetailsByName=repo.findByUserName(userName);
+		if(Objects.isNull(jobSeekerDetailsByName)) {
+			
+			
+			
+			
+			throw new CustomException("Job seeker doesn't found with name: "+userName,"NOT_FOUND",404);
+		}
+		else {
+			return jobSeekerDetailsByName;
+		}
 	}
 	public void deleteUserByUserName(String userName) {
 		// TODO Auto-generated method stub
