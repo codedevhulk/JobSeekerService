@@ -25,7 +25,11 @@ public class JobSeekerService {
 	public void signupDetails(JobSeekerDetails jobSeekerDetailsRequest) {
 		
 		
-		
+		if(jobSeekerDetailsRequest.getUserName().isEmpty()) {
+			
+			
+			throw new CustomException("User name is mandatory for signup, please provide the user name","BAD_REQUEST",400);
+		}
 		
 		JobSeekerDetails jobSeekerDetails=repo.findByUserName(jobSeekerDetailsRequest.getUserName());
 		
