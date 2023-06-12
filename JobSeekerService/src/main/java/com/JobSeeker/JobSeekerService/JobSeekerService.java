@@ -190,6 +190,12 @@ public class JobSeekerService {
 		}
 	}
 	public void deleteUserByUserName(String userName) {
+		
+		JobSeekerDetails jobSeekerDetailsByName=repo.findByUserName(userName);
+		if(Objects.isNull(jobSeekerDetailsByName)) {
+			
+			throw new CustomException("Job seeker doesn't found with name: "+userName,"NOT_FOUND",404);
+		}
 		// TODO Auto-generated method stub
 		repo.deleteByUserName(userName);
 		
