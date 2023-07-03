@@ -14,10 +14,10 @@ public interface JobSeekerRepository extends JpaRepository <JobSeekerDetails,Lon
     
     
     @Transactional
-    JobSeekerDetails findByUserName(String userName);
+    JobSeekerDetails findByUsername(String username);
 
     @Transactional
-	void deleteByUserName(String userName);
+	void deleteByUsername(String username);
 
     @Transactional
 	JobSeekerDetails findByJobSeekerId(long id);

@@ -1,17 +1,21 @@
 package com.JobSeeker.JobSeekerService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.JobSeeker.JobSeekerService.Entity.JobSeekerDetails;
-import com.JobSeeker.JobSeekerService.Model.JobSeekerDetailsRequest;
+import com.JobSeeker.JobSeekerService.Model.JobseekerSignupResponse;
 import com.JobSeeker.JobSeekerService.Model.SignInDetailsRequest;
+import com.JobSeeker.JobSeekerService.Model.UserInfoResponse;
 import com.JobSeeker.JobSeekerService.Repository.JobSeekerRepository;
 import com.JobSeeker.JobSeekerService.exception.CustomException;
+//import com.RecruitService.RecruiterService.Entity.RecruiterDetails;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +26,31 @@ public class JobSeekerService {
 	PasswordEncoder passwordEncoder;
     @Autowired
     JobSeekerRepository repo;
-	public void signupDetails(JobSeekerDetails jobSeekerDetailsRequest) {
+    @Autowired
+    JwtUtils jwtUtils;
+    
+	public JobseekerSignupResponse createNewRecruiter(JobSeekerDetails rd) {
+			
+			JobSeekerDetails jobSeekerDetails=repo.findByUsername(rd.getUsername());
+			
+			if(!Objects.isNull(jobSeekerDetails)) {	 
+				throw new CustomException("Username is already present.Try with other username!", "", 500);
+			}
+			
+			rd.setPassword(passwordEncoder.encode(rd.getPassword()));
+			//System.out.println(repo.save(rd));
+			JobSeekerDetails savedObj=repo.save(rd);
+			JobseekerSignupResponse signupresponse=new JobseekerSignupResponse(savedObj.getJobSeekerId(),"JobSeeker registered successfully!");
+			return signupresponse;
+	}
+	
+		public JobSeekerDetails updateRecruiterDetails(JobSeekerDetails rd) {
+				
+				return repo.save(rd);
+			}
+    
+    
+	/*public void signupDetails(JobSeekerDetails jobSeekerDetailsRequest) {
 		
 		
 		if(jobSeekerDetailsRequest.getUserName().isEmpty()) {
@@ -121,7 +149,7 @@ public class JobSeekerService {
 		//repo.save(null)
 	}
 		
-	}
+	}*/
 	public List<JobSeekerDetails> allDetails() {
 		return repo.findAll();
 	}
@@ -131,32 +159,35 @@ public class JobSeekerService {
 	
 	
 	
-	public String signInDetails(SignInDetailsRequest signInDetailsRequest) {
-		String message="";
-		JobSeekerDetails signinDetails = repo.findByEmail(signInDetailsRequest.getEmail());
+	public ResponseEntity<UserInfoResponse> signInDetails(SignInDetailsRequest signInDetailsRequest) {
+		//String message="";
+		JobSeekerDetails signinDetails = repo.findByUsername(signInDetailsRequest.getUsername());
 		if (signinDetails!= null) 
 		{
 		 String password = signInDetailsRequest.getPassword();
 		 String encodedPassword = signinDetails.getPassword();
          Boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
-        if (isPwdRight) 
-        {
-        	
-        	
-		    message="Login Success";
-		    return message;
+         if (isPwdRight) 
+         {
+         	String jwttoken = jwtUtils.generateTokenFromUsername(signInDetailsRequest.getUsername());
+         	return ResponseEntity.ok()//.header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+     		        .body(new UserInfoResponse(signinDetails.getJobSeekerId(),
+     		        							signinDetails.getUsername(),
+     		        							signinDetails.getEmail(),
+     		        							jwttoken,
+     		        							Arrays.asList("ROLE_JOBSEEKER")
+     		                                   ));
+ 		    
 
-		} else 
-		{
-			message = "Login Failed";
-			return message;
-	     }
+ 		} else 
+ 		{
+ 			throw new CustomException("Invalid Credentials", "", 500);
+ 	     }
 
-		}
-		else {
-            message="Email not exits";
-            return message;
-        }
+ 		}
+ 		else {
+ 			throw new CustomException("Username not found.Please Register!", "", 500);
+         }
 		
 	}
 	public JobSeekerDetails getJobSeekerById(long id) {
@@ -177,7 +208,7 @@ public class JobSeekerService {
 		log.info("user name"+userName);
 		
 		
-		JobSeekerDetails jobSeekerDetailsByName=repo.findByUserName(userName);
+		JobSeekerDetails jobSeekerDetailsByName=repo.findByUsername(userName);
 		if(Objects.isNull(jobSeekerDetailsByName)) {
 			
 			
@@ -191,13 +222,13 @@ public class JobSeekerService {
 	}
 	public void deleteUserByUserName(String userName) {
 		
-		JobSeekerDetails jobSeekerDetailsByName=repo.findByUserName(userName);
+		JobSeekerDetails jobSeekerDetailsByName=repo.findByUsername(userName);
 		if(Objects.isNull(jobSeekerDetailsByName)) {
 			
 			throw new CustomException("Job seeker doesn't found with name: "+userName,"NOT_FOUND",404);
 		}
 		// TODO Auto-generated method stub
-		repo.deleteByUserName(userName);
+		repo.deleteByUsername(userName);
 		
 	}
 	

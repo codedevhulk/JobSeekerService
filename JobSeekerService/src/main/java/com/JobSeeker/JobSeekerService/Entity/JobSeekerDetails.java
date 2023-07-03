@@ -23,11 +23,11 @@ public class JobSeekerDetails {
 	
 	
 	@Id
-	//@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	long jobSeekerId;
 	String firstName;
 	String lastName;
-	String userName;
+	String username;
 	String mobileNumber;
 	String email;
 	String password;

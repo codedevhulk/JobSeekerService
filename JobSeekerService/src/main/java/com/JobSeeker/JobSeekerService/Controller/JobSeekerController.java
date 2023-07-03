@@ -18,20 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.JobSeeker.JobSeekerService.JobSeekerService;
 import com.JobSeeker.JobSeekerService.Entity.JobSeekerDetails;
-import com.JobSeeker.JobSeekerService.Model.JobSeekerDetailsRequest;
+import com.JobSeeker.JobSeekerService.Model.JobseekerSignupResponse;
 import com.JobSeeker.JobSeekerService.Model.SignInDetailsRequest;
+import com.JobSeeker.JobSeekerService.Model.UserInfoResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/jobseeker")
 @Slf4j
-@CrossOrigin("http://localhost:3000/")
+@CrossOrigin
 public class JobSeekerController {
-	
-	
-	
-
 	
 	
 	@Autowired
@@ -44,8 +41,8 @@ public class JobSeekerController {
 		
 		log.info(jobSeekerDetailsRequest.toString());
 		log.info(jobSeekerDetailsRequest.getAddress());
-	jobSeekerService.signupDetails(jobSeekerDetailsRequest);
-//		
+		//jobSeekerService.signupDetails(jobSeekerDetailsRequest);
+		jobSeekerService.updateRecruiterDetails(jobSeekerDetailsRequest);
 //		log.info("Passing the jobSeekerDetails to service layer"+ jobSeekerDetailsRequest.toString());
 		return true;
 	}
@@ -81,9 +78,15 @@ public class JobSeekerController {
 	}
 	
 	@PostMapping("/signin")
-	public ResponseEntity<String> signInDetails(@RequestBody SignInDetailsRequest signInDetailsRequest){
-		String message=jobSeekerService.signInDetails(signInDetailsRequest);
-		return new ResponseEntity<>(message,HttpStatus.OK);
+	public ResponseEntity<UserInfoResponse> signInDetails(@RequestBody SignInDetailsRequest signInDetailsRequest){
+		return jobSeekerService.signInDetails(signInDetailsRequest);
+		//return new ResponseEntity<>(message,HttpStatus.OK);
+	}
+	@PostMapping("/signup")
+	public ResponseEntity<JobseekerSignupResponse> createNewRecruiter(@RequestBody JobSeekerDetails rd) {
+		
+		JobseekerSignupResponse obj=jobSeekerService.createNewRecruiter(rd);
+		return new ResponseEntity<>(obj,HttpStatus.ACCEPTED);//HttpStatus.ok
 	}
 	
 	
