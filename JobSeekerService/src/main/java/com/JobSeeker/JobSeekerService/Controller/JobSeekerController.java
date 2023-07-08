@@ -91,7 +91,7 @@ public class JobSeekerController {
 	// To Get a Job seeker details by his Id
 	
 	@GetMapping("/getbyid/{id}")
-	public ResponseEntity<JobSeekerDetails> getJobSeekerById(@PathVariable int id){
+	public ResponseEntity<JobSeekerDetails> getJobSeekerById(@PathVariable long id){
 		
 		
 		JobSeekerDetails jobSeekerDetails=jobSeekerService.getJobSeekerById(id);

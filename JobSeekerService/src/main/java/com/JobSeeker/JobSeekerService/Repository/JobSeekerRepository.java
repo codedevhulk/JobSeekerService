@@ -9,6 +9,8 @@ import com.JobSeeker.JobSeekerService.Entity.JobSeekerDetails;
 
 @Repository
 public interface JobSeekerRepository extends JpaRepository <JobSeekerDetails,Long>{
+	
+	
     @Transactional
 	JobSeekerDetails findByEmail(String email);
     

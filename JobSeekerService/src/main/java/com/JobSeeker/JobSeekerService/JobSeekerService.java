@@ -149,7 +149,8 @@ public class JobSeekerService {
 	public JobSeekerDetails getJobSeekerById(long id) {
 		// TODO Auto-generated method stub
 		log.info("Getting the job seeker by ID " + id);
-		JobSeekerDetails jobSeekerDetails = repo.findByJobSeekerId(id);
+		//JobSeekerDetails jobSeekerDetails = repo.findByJobSeekerId(id);
+		JobSeekerDetails jobSeekerDetails = repo.findById(id).get();
 		if (Objects.isNull(jobSeekerDetails)) {
 			throw new CustomException("Job seeker not found with ID: " + id, "NOT_FOUND", 404);
 		} else {
